@@ -1,48 +1,35 @@
 <link rel="import" href="../../../bower_components/core-ajax/core-ajax.html">
 
 <polymer-element name="sept-util-request"
-                 attributes="body response method auto url params contentType handleAs bind withSession requestHelper">
+                 attributes="response auto bind operation responseStatus">
 
     <template>
-        <core-ajax id="ajax" method="{{method}}" contentType="{{contentType}}" handleAs="{{handleAs}}" params="{{params}}"
+        <core-ajax id="ajax" method="POST" contentType="application/json" handleAs="json"
                    url="{{url}}" body="{{body}}"
-                   response="{{response}}"></core-ajax>
+                   response="{{responseRaw}}"></core-ajax>
     </template>
 
     <script>
         Polymer('sept-util-request', {
-            /* Model is recreated always */
-            ready          : function () {
+            ready      : function () {
                 this.checkAutoGo();
             },
-            go             : function () {
-                if(this.method === "POST") {
-                    this.model = this.initModel();
-                    _.overwriteExisting(this.bind, this.model);
-                    this.body = this.processRequestModel(this.model);
-                    if(_.isObject(this.body))
-                        this.body = JSON.stringify(this.body);
-                }
-                else if(this.method === "GET") {
-                    _.overwriteExisting(this.bind, this.params);
-                    this.params = this.processRequestModel(this.params);
-                    if(_.isObject(this.params))
-                        this.params = JSON.stringify(this.params);
-                }
+            go         : function () {
+                this.model = this.initModel();
+                _.overwriteExisting(this.bind, this.model);
+                this.body = this.createRESTRequest(this.processRequestModel(this.model));
+                if (_.isObject(this.body))
+                    this.body = JSON.stringify(this.body);
                 this.$.ajax.go();
             },
-            method         : "POST",
-            contentType    : "application/json",
-            handleAs       : "json",
-            withSession    : true,
-            model          : null,
-            bind           : {}, //{reflect: true, value: null},
-            bindChanged    : function() { this.checkAutoGo(); },
-            response       : null,
-            responseChanged: function (oldVal, newVal) { },
-            /** Init model should be overriden in every instance of sept-util-request element */
-            initModel      : function () { return {}; },
+            url        : septEngine.globals.RESTfulServiceUrl,
+            withSession: true,
+            model      : null,
+            bind       : {}, //{reflect: true, value: null},
+            response   : null,
 
+            /** Init model should be overriden in every instance of sept-util-request element */
+            initModel       : function () { return {}; },
             /** When init model is changed, bind should be inited same way model is
              * cause otherwise bind level.
              * */
@@ -51,22 +38,37 @@
             /** If model need some processing (like hashing password, this method should be overriden */
             processRequestModel: function (model) { return model; },
 
-            /** Request helper should contain name of property in septCore.requestHelper object */
-            requestHelperChanged: function (oldVal, newVal) {
-                if (typeof septCore.requestHelper[newVal] !== 'undefined') {
+            createRESTRequest : function (model) {
+                var message = new septEngine.domain.RESTRequest(
+                        new septEngine.domain.RESTRequestHeaders(this.operation, septEngine.userSession),
+                        model);
+                return message;
+            },
+            bindChanged       : function () { this.checkAutoGo(); },
+            /** operation value is the key for the requestHelper, because same operations have always same models and processing functions */
+            operationChanged  : function (oldVal, newVal) {
+                if (typeof septEngine.requestHelper[newVal] !== 'undefined') {
 
-                    if (typeof septCore.requestHelper[newVal].initModel !== 'undefined')
-                        this.initModel = septCore.requestHelper[newVal].initModel;
-                    if (typeof septCore.requestHelper[newVal].processRequestModel !== 'undefined')
-                        this.processRequestModel = septCore.requestHelper[newVal].processRequestModel;
+                    if (typeof septEngine.requestHelper[newVal].initModel !== 'undefined')
+                        this.initModel = septEngine.requestHelper[newVal].initModel;
+                    if (typeof septEngine.requestHelper[newVal].processRequestModel !== 'undefined')
+                        this.processRequestModel = septEngine.requestHelper[newVal].processRequestModel;
                 }
                 else
-                    throw new Error("Request helper: " + newVal + " not available in septCore.requestHelper");
+                    throw new Error("Request helper: " + newVal + " not available in septEngine.requestHelper");
             },
-            bodyChanged         : function () {
+            responseRawChanged: function (oldVal, newVal) {
+                if (newVal.headers.status.type == septEngine.domain.RESTResponseStatusType.success)
+                    this.response = newVal.content;
+                else {
+                    this.response = newVal;
+                }
+                this.responseStatus = newVal.headers.status;
+            },
+            bodyChanged    : function () {
                 if (this.auto === "true" || this.auto === "") this.go();
             },
-            checkAutoGo         : function () { if (this.auto === "true" || this.auto === "") this.go(); }
+            checkAutoGo       : function () { if (this.auto === "true" || this.auto === "") this.go(); }
         });
 
     </script>

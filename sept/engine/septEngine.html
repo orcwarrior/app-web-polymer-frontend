@@ -4,6 +4,7 @@ Created by orcwarrior on 2014-09-04.
 <script>
     window.septEngine = {
         globals  : {
+            RESTfulServiceUrl : 'http://localhost:802/sept-api', // 'http://localhost:8085/app/api/',
             articleStates : {
                 'TILE' : 0,
                 'BIGTILE' : 1,
@@ -12,23 +13,16 @@ Created by orcwarrior on 2014-09-04.
         },
         userSession : null,
         domain : {},
-        mocks     : {},
-        HTMLParser: function (aHTMLString) {
-            var html = document.implementation.createDocument("http://www.w3.org/1999/xhtml", "html", null),
-                body = document.createElementNS("http://www.w3.org/1999/xhtml", "body");
-            html.documentElement.appendChild(body);
-
-            body.appendChild(Components.classes["@mozilla.org/feed-unescapehtml;1"]
-                                     .getService(Components.interfaces.nsIScriptableUnescapeHTML)
-                                     .parseFragment(aHTMLString, false, null, body));
-
-            return body;
-        }
+        requestHelper : {},
+        mocks     : {}
     };
 </script>
 <!-- Libraries -->
 <script src="./libs/underscore.js"></script>
+<script src="./libs/underscore-extension.js"></script>
 <script src="./libs/moment.js"></script>
+<script src="./libs/CryptoJS.md5.js"></script>
 <!-- Includes -->
 <script src="./septMocks.js"></script>
 <script src="./septDomain.js"></script>
+<script src="./septRequestHelper.js"></script>

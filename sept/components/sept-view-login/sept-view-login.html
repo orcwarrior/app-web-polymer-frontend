@@ -1,16 +1,33 @@
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
 <polymer-element name="sept-view-login">
     <template>
         <link rel="stylesheet" type="text/css" href="sept-view-login.css" shim-shadowdom/>
-                <paper-input placeholder="login" value="{{login}}"></paper-input>
-                <paper-input placeholder="hasło" type="password" value="{{password}}"></paper-input>
-                <paper-button label="Zaloguj się" raisedButton></paper-button>
-                <div id="response">{{response}}</div>
+        <sept-util-request id="loginRequest" operation="RESTOperation.login"></sept-util-request>
+        <paper-input placeholder="login" value="{{$.loginRequest.bind.username}}"></paper-input>
+        <paper-input placeholder="hasło" type="password" value="{{$.loginRequest.bind.password}}"></paper-input>
+        <paper-button label="Zaloguj się" raisedButton on-tap="{{sendLoginRequest}}"></paper-button>
+        <div id="response">session {{$.loginRequest.response.uuid}}</div>
+        {{message}}
     </template>
 
     <script>
         Polymer('sept-view-login', {
+            message : null,
+            sendLoginRequest: function() {
+                this.$.loginRequest.go();
+            },
+            processLoginResponse : function(oldval, newVal) {
+                if(this.$.loginRequest.responseStatus.type === septEngine.domain.RESTResponseStatusType.fail) {
+                    this.message = "Nieudało się zalogować, powód: " + newVal.headers.status.message;
+                }
+                else
+                    this.message = "Pomyślnie zalogowano";
+            },
+            observe : {
+                '$.loginRequest.response' : 'processLoginResponse'
+            }
         });
     </script>
 </polymer-element>
