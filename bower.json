@@ -1,0 +1,21 @@
+{
+  "name": "event-page-frontend",
+  "version": "0.0.0",
+  "authors": [
+    "Dariusz Kobuszewski"
+  ],
+  "description": "Frontend strony poświeconej pewnemu wydarzeniu.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "core-component-page": "Polymer/core-component-page#>=0.4.0 <1.0.0",
+    "polymer": "Polymer/polymer#~0.4.0"
+  }
+}

@@ -1,0 +1,20 @@
+<link rel="import" href="../../../bower_components/core-layout/core-layout.html">
+<link rel="import" href="../../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../sept-main/sept-main.html">
+<link rel="import" href="../sept-notifications/sept-notifications.html">
+
+<polymer-element name="sept-app">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-app.css"/>
+        <core-header-panel mode="seamed">
+            <sept-notifications class="core-header"></sept-notifications>
+            <sept-main></sept-main>
+        </core-header-panel>
+    </template>
+
+    <script>
+        Polymer('sept-app', {
+
+        });
+    </script>
+</polymer-element>

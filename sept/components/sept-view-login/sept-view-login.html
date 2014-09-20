@@ -1,0 +1,16 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<polymer-element name="sept-view-login">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-view-login.css" shim-shadowdom/>
+                <paper-input placeholder="login" value="{{login}}"></paper-input>
+                <paper-input placeholder="hasło" type="password" value="{{password}}"></paper-input>
+                <paper-button label="Zaloguj się" raisedButton></paper-button>
+                <div id="response">{{response}}</div>
+    </template>
+
+    <script>
+        Polymer('sept-view-login', {
+        });
+    </script>
+</polymer-element>

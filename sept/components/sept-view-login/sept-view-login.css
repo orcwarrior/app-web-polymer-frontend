@@ -1,0 +1,65 @@
+/* Colors */
+/* Background color */
+/* header */
+/* side menu */
+/* content */
+/* content header menu */
+/* fonts */
+/* font sizes */
+/* based on google design */
+/* font colors */
+/* Articles */
+:host {
+  display: block;
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+  padding: 10px;
+}
+:host > * {
+  margin-top: 1em;
+}
+paper-button {
+  background-color: #444444 !important;
+  display: block;
+  font-size: 22px;
+}
+paper-input {
+  width: 400px;
+  font-size: 22px;
+  color: #ffffff !important;
+}
+paper-input /deep/ input {
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+paper-input /deep/ #underlineHighlight.focusedColor {
+  background-color: rgba(255, 255, 255, 0.87) !important;
+}
+paper-input /deep/ #focusedUnderline {
+  background-color: rgba(255, 255, 255, 0.87) !important;
+}
+paper-input /deep/ .focusedColor {
+  color: #ffffff !important;
+}
+paper-input /deep/ .cursor {
+  color: rgba(255, 255, 255, 0.87);
+}
+paper-input /deep/ input::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #dddddd;
+}
+paper-input /deep/ input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #dddddd;
+  opacity: 1;
+}
+paper-input /deep/ input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #dddddd;
+  opacity: 1;
+}
+paper-input /deep/ input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #dddddd;
+}

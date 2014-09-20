@@ -1,0 +1,21 @@
+/* Colors */
+/* Background color */
+/* header */
+/* side menu */
+/* content */
+/* content header menu */
+/* fonts */
+/* font sizes */
+/* based on google design */
+/* font colors */
+/* Articles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+body /deep/ sept-element-article {
+  color: floralwhite;
+}

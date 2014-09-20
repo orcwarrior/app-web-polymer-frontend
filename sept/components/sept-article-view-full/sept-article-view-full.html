@@ -1,0 +1,173 @@
+<link rel="import" href="../../../bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
+<link rel="import" href="../../../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../../../bower_components/core-overlay/core-overlay.html">
+<link rel="import" href="../../../bower_components/core-icon-button/core-icon-button.html">
+
+<polymer-element name="sept-article-view-full" attributes="article">
+    <template>
+        <style shim-shadowdom>
+            :host {
+                position: fixed; left: 0; top: 0;
+                width: 100%; height: 100%;
+            }
+            #closeWrapper {
+                position: absolute;left: 0; top: 0;
+                width: 100%; height: 100%;
+            }
+            #artWrapper {
+                display: block;
+                height: 100%;
+                max-width: 1650px; min-width: 500px;
+                overflow-y : hidden;
+                flex: auto;
+                align-self: flex-start;
+                overflow: auto;
+                margin-left: auto; margin-right: auto;
+            }
+
+            section {
+                z-index: 5;
+                height: 100%;
+                width: 100%;
+            }
+
+            h1 {
+                z-index: 6;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                top: 8px !important;
+                right: 20px !important;
+                float: right;
+                text-align: right;
+                color: rgb(255, 226, 219);
+                font-family: 'Roboto', sans-serif;
+                font-size: 40px;
+                font-weight: 300;
+                /* So it will not overflow toolbar buttons */
+                margin-left: 300px !important;
+            }
+
+            section span#author {
+                z-index: 6;
+                float: right;
+                font-family: 'Roboto', sans-serif;
+                font-size: 18px;
+                font-weight: 100;
+                text-transform: uppercase;
+                color: #444;
+            }
+
+            section p#firstParagraph, section p#restOfText {
+                position: static;
+                z-index: 4;
+                padding: 1.5em;
+                font-family: 'Roboto', sans-serif;
+                font-size: 24px;
+                color: #444;
+            }
+
+            /* HEADER */
+            core-toolbar {
+                background-color: tomato;
+                position: relative;
+                height: 500px;
+            }
+
+            core-icon-button {
+                z-index: 10;
+            }
+
+            #bgImage, #bgGradient {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 500px;
+                width: 100%;
+                margin: 0;
+            }
+
+            #bgImage {
+                z-index: 1;
+                background-size: cover;
+                background-position: center;
+                background-color: tomato;
+            }
+
+            #bgGradient {
+                z-index: 5;
+                background: -moz-linear-gradient(top, rgba(38, 38, 38, 0) 0%, rgba(38, 38, 38, 0) 41%, rgba(38, 38, 38, 1) 100%); /* FF3.6+ */
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(38, 38, 38, 0)), color-stop(41%, rgba(38, 38, 38, 0)), color-stop(100%, rgba(38, 38, 38, 1))); /* Chrome,Safari4+ */
+                background: -webkit-linear-gradient(top, rgba(38, 38, 38, 0) 0%, rgba(38, 38, 38, 0) 41%, rgba(38, 38, 38, 1) 100%); /* Chrome10+,Safari5.1+ */
+                background: -o-linear-gradient(top, rgba(38, 38, 38, 0) 0%, rgba(38, 38, 38, 0) 41%, rgba(38, 38, 38, 1) 100%); /* Opera 11.10+ */
+                background: -ms-linear-gradient(top, rgba(38, 38, 38, 0) 0%, rgba(38, 38, 38, 0) 41%, rgba(38, 38, 38, 1) 100%); /* IE10+ */
+                background: linear-gradient(to bottom, rgba(38, 38, 38, 0) 0%, rgba(38, 38, 38, 0) 41%, rgba(38, 38, 38, 1) 100%); /* W3C */
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00262626', endColorstr='#262626', GradientType=0); /* IE6-9 */
+            }
+
+            /* BUGFIX: 1px white stripe comes underneath header, looks fcking ugly */
+            core-scroll-header-panel {
+                background-color: transparent;
+            }
+
+            core-scroll-header-panel /deep/ #mainContainer {
+                background-color: #fff;
+            }
+        </style>
+        <div id="closeWrapper" on-tap="{{closeArticle}}">
+            <core-scroll-header-panel id="artWrapper" flex hero-id="hero-art-wrapper" hero condenses keepCondensedHeader
+                                      headerHeight="500" condensedHeaderHeight="64" on-tap="{{dontCloseArticle}}"
+                                      on-core-header-transform="{{headerTransform}}">
+
+                <core-toolbar>
+                    <core-icon-button icon="arrow-back" on-tap="{{closeArticle}}"></core-icon-button>
+                    <div id="bgGradient" hero-id="hero-art-gradient" hero></div>
+                    <div id="bgImage" hero-id="hero-art-img" hero></div>
+                    <h1 hero-id="hero-art-title" hero class="bottom fit">{{article.title}}</h1>
+                </core-toolbar>
+
+                <section hero-id="hero-art-content" hero content>
+                    <p id="firstParagraph" hero-id="hero-art-1stparagraph" hero content></p>
+
+                    <p id="restOfText" content></p>
+                    <span id="author" hero-id="hero-art-author" hero content>{{article.author}}</span>
+                </section>
+            </core-scroll-header-panel>
+        </div>
+    </template>
+
+    <script>
+        Polymer('sept-article-view-full', {
+            articleChanged     : function (oldVal, newVal) {
+                var bg = this.$.bgImage;
+                bg.style.backgroundImage = "url(\'" + this.article.image + "\')";
+                this.$.firstParagraph.innerHTML = this.article.firstParagraph;
+                this.$.restOfText.innerHTML = this.article.content;
+            },
+            /* Fired when body of article is clicked */
+            dontCloseArticle : function() {
+              this.preventFromClosingArticle = true;
+            },
+            closeArticle       : function () {
+                if(this.preventFromClosingArticle === true) {
+                    this.preventFromClosingArticle = false;
+                    return;
+                }
+                this.fire('article-state-change', {targetPage: 0}, this);
+            },
+            headerTransform    : function (event, detail, sender) {
+                this.$.artWrapper.translateY(this.$.bgImage.style, -detail.y);
+                this.$.artWrapper.translateY(this.$.bgGradient.style, -detail.y);
+            },
+            updateHeaderOpacity: function (oldVal, newVal) {
+                var mineOpacity = Math.min(newVal * 1.1, 1);
+                this.$.bgImage.style.opacity = mineOpacity;
+                this.$.bgGradient.style.opacity = mineOpacity;
+            },
+            /*core-scroll-header-panel is kinda poorly implemented, cannot find another elegant way to do it*/
+            observe            : {
+                '$.artWrapper.$.headerBg.style.opacity': 'updateHeaderOpacity',
+            }
+        });
+    </script>
+</polymer-element>
