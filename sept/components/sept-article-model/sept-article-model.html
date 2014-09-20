@@ -1,0 +1,52 @@
+<link rel="import" href="../../../bower_components/core-layout/core-layout.html">
+<link rel="import" href="../../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
+
+<polymer-element name="sept-article-model" attributes="article">
+    <template>
+        <core-ajax id="rndArticle_request" handleAs="json"
+                   params="{{params}}"
+                   url="http://localhost:802/wiki-api" auto response="{{response}}"></core-ajax>
+    </template>
+
+    <script>
+        Polymer('sept-article-model', {
+            ready                : function () {
+                var a = 'wtf';
+            },
+            params               : {
+                action      : 'query',
+                generator   : 'random',
+                grnnamespace: '0',
+                prop        : 'extracts',
+                exchars     : '2500',
+                format      : 'json'
+            },
+            response             : null,
+            article              : null,
+            convertArticle       : function () {
+                var convertedArticle = {};
+                convertedArticle.title = this.article.title;
+                convertedArticle.firstParagraph = this.extractFirstParagraph(this.article.extract);
+                convertedArticle.content = this.article.extract.substr(convertedArticle.firstParagraph.length + 3 + 4);
+                return convertedArticle;
+            },
+            setupArticleMocks    : function (convertedArticle) {
+                convertedArticle.author = 'Dariusz Kobuszewski';
+                var img = _.sample(septEngine.mocks.articleImages);
+                septEngine.mocks.articleImages = _.without(septEngine.mocks.articleImages, img);
+                convertedArticle.image = img;
+            },
+            responseChanged      : function (oldVal, newVal) {
+                var helper = newVal.query.pages;
+                this.article = helper[Object.keys(helper)[0]];
+                this.article = this.convertArticle();
+                this.setupArticleMocks(this.article);
+            },
+            extractFirstParagraph: function (content) {
+                return content.substring(content.indexOf('<p>') + 3, content.indexOf('</p>'));
+            }
+        })
+        ;
+    </script>
+</polymer-element>

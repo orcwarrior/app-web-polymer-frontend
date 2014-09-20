@@ -1,0 +1,21 @@
+
+<polymer-element name="sept-element-article-content" attributes="rawContent firstParagraph longerDescription">
+    <template>
+    </template>
+
+    <script>
+        Polymer('sept-element-article-content', {
+            rootEl : null,
+            ready                 : function () {
+                this.rootEl = document.createElement("div");
+                this.shadowRoot.appendChild(this.rootEl);
+                if(!_.isUndefined(this.rawContent))
+                    this.rootEl.innerHTML = this.rawContent;
+            },
+            rawContentChanged: function (oldVal, newVal) {
+                if(!_.isUndefined(this.rootEl))
+                    this.rootEl.innerHTML = this.rawContent;
+            }
+        });
+    </script>
+</polymer-element>

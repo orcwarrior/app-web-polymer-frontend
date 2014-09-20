@@ -1,0 +1,82 @@
+/* Colors */
+/* Background color */
+/* header */
+/* side menu */
+/* content */
+/* content header menu */
+/* fonts */
+/* font sizes */
+/* based on google design */
+/* font colors */
+/* Articles */
+:host {
+  background-color: #ff6347;
+}
+core-toolbar {
+  flex: 1;
+  background-color: #ff6347;
+}
+core-icon {
+  position: absolute !important;
+  left: 24px;
+  top: 14px;
+  color: #ffffff;
+  width: 36px !important;
+  height: 36px !important;
+  cursor: pointer;
+}
+core-icon#cancelIcon {
+  visibility: hidden;
+}
+paper-menu-button {
+  position: absolute;
+  top: 14px;
+  color: #ffffff;
+}
+paper-menu-button::shadow core-icon {
+  width: 36px;
+  height: 36px;
+}
+#userMenu {
+  margin-top: 8px;
+  margin-left: 120px;
+  display: inline-block;
+  height: 50px;
+  width: 0;
+  overflow-y: hidden;
+}
+paper-menu-button:shadow core-popup-menu {
+  margin-left: 50px;
+  overflow: hidden !important;
+}
+paper-menu-button /deep/ core-menu {
+  margin-left: 36px;
+  overflow: auto !important;
+}
+paper-button {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.87);
+}
+paper-button:hover {
+  font-weight: 500;
+}
+paper-button /deep/ div#content span {
+  vertical-align: middle;
+}
+paper-button /deep/ #ripple {
+  color: #000000;
+}
+/* Views*/
+core-collapse {
+  display: block;
+}
+core-collapse .toolbar-view {
+  height: 400px;
+  min-width: 350px;
+  max-width: 50%;
+  width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 8%;
+}

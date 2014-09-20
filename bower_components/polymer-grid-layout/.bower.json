@@ -1,0 +1,19 @@
+{
+  "name": "polymer-grid-layout",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.3.0"
+  },
+  "homepage": "https://github.com/PolymerLabs/polymer-grid-layout",
+  "version": "0.3.0",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.3.0",
+    "commit": "60d6fe479426ca5a18163e0c788f68c7b584d51c"
+  },
+  "_source": "git://github.com/PolymerLabs/polymer-grid-layout.git",
+  "_target": "~0.3.0",
+  "_originalSource": "PolymerLabs/polymer-grid-layout",
+  "_direct": true
+}

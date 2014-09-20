@@ -1,0 +1,65 @@
+@import '../../../style/global-constants.less';
+
+:host {
+  background-color: @themeColorBase;
+}
+core-toolbar {
+  flex: 1;
+  background-color: @themeColorBase;
+}
+core-icon {
+  position: absolute !important;
+  left: 24px; top: 14px;
+  color: @paperColor;
+  width: 36px !important; height: 36px !important;
+  cursor: pointer;
+  &#cancelIcon {
+    visibility: hidden;
+  }
+}
+paper-menu-button {
+  position: absolute; top: 14px;
+  color: @paperColor;
+  &::shadow core-icon {
+    width: 36px; height: 36px;
+  }
+}
+#userMenu{
+  margin-top: 8px;
+  margin-left: 120px;
+  display: inline-block;
+  height: 50px; width: 0;
+  overflow-y: hidden;
+}
+paper-menu-button:shadow core-popup-menu {
+  margin-left: 50px;
+  overflow: hidden !important;
+}
+paper-menu-button @{deep} core-menu {
+  margin-left: 36px;
+  overflow: auto !important;
+}
+paper-button {
+  font-family: @fontFamilyMain;
+  font-size: @fontSizeBody;
+  color: @fontInverseNormal;
+  &:hover{
+    font-weight: 500;
+  }
+  & @{deep} div#content span {
+    vertical-align: middle;
+  }
+  & @{deep} #ripple {
+    color: darken(@darkBackgroundColor,30%);
+  }
+}
+
+/* Views*/
+core-collapse {
+  display: block;
+  & .toolbar-view {
+    height: 400px; min-width: 350px; max-width: 50%; width: 350px;
+    margin-left: auto; margin-right: auto;
+    padding-top: 8%;
+  }
+}

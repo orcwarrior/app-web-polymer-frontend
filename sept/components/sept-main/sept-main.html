@@ -1,0 +1,85 @@
+<link rel="import" href="../../../bower_components/core-layout/core-layout.html">
+<link rel="import" href="../sept-element-article/sept-element-article.html">
+
+<polymer-element name="sept-main">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-main.css" shim-shadowdom/>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+        <sept-element-article></sept-element-article>
+    </template>
+
+    <script>
+        Polymer('sept-main', {
+            domReady            : function () {
+                var self = this;
+                window.addEventListener('resize', function (e) {
+                    self.recalculateGrid();
+                }, true);
+                this.addEventListener("articles-changed", this.articlesChangedEvent);
+                this.markLastRealArticle();
+                this.recalculateGrid();
+                // TODO: Temporary, sth more elegant needed:
+                _.delay(function () { self.recalculateGrid(); }, 3000);
+            },
+            lastEventArticle    : null,
+            articlesChangedEvent: function (event, detail, sender) {
+                /* Disable main scrollbar if fullscreen state is set */
+                if(event.detail.state == septEngine.globals.articleStates.FULL) {
+                    document.body.style.overflow = "hidden";
+                }
+                else {
+                    document.body.style.overflow = "auto"
+                }
+                if (event.detail.srcArticle !== this.lastEventArticle && this.lastEventArticle !== null) {
+                    this.lastEventArticle.closeArticle();
+                }
+                this.lastEventArticle = event.detail.srcArticle;
+            },
+            recalculateGrid     : function () {
+                this.removeDummies();
+                this.articlesHTML = this.shadowRoot.querySelectorAll('sept-element-article');
+                this.addDummies();
+            },
+            removeDummies       : function () {
+                var dummies = this.shadowRoot.querySelectorAll('sept-element-article.dummy');
+                _.forEach(dummies, function (el) { this.shadowRoot.removeChild(el); }, this);
+            },
+            addDummies          : function () {
+                var newDummy;
+                var last = _.last(this.articlesHTML);
+                var limit = 5;
+                var lastTop = last.getBoundingClientRect().top;
+                do {
+                    newDummy = document.createElement('sept-element-article');
+                    newDummy.className = "dummy";
+                    this.shadowRoot.appendChild(newDummy);
+                    limit -= 1;
+                }
+                while (newDummy.getBoundingClientRect().top == lastTop && limit > 0)
+                this.shadowRoot.removeChild(newDummy);
+            },
+            markLastRealArticle : function () {
+                this.articlesHTML = this.shadowRoot.querySelectorAll('sept-element-article');
+                _.last(this.articlesHTML).className += " lastArticle";
+            }
+        });
+    </script>
+</polymer-element>

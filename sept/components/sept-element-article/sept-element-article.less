@@ -1,0 +1,23 @@
+@import '../../../style/global-constants.less';
+
+:host {
+}
+core-animated-pages {
+  height: @articleTileHeight; width: @articleTileWidth;
+}
+
+sept-article-view-tile, sept-article-view-bigtile {
+  min-width: @articleTileWidth; width: @articleTileWidth;
+  max-width: @articleTileWidth;
+  height: @articleTileHeight;
+}
+sept-article-view-bigtile {
+  min-width: @articleBigTileWidth;
+  max-width: @articleBigTileWidth;
+}
+sept-article-view-full {
+    position: fixed !important;
+    z-index: 6;
+    left: 0% !important;
+    right: 0% !important;
+}

@@ -1,0 +1,32 @@
+/* Colors */
+/* Background color */
+/* header */
+/* side menu */
+/* content */
+/* content header menu */
+/* fonts */
+/* font sizes */
+/* based on google design */
+/* font colors */
+/* Articles */
+core-animated-pages {
+  height: 290px;
+  width: 500px;
+}
+sept-article-view-tile,
+sept-article-view-bigtile {
+  min-width: 500px;
+  width: 500px;
+  max-width: 500px;
+  height: 290px;
+}
+sept-article-view-bigtile {
+  min-width: 1000px;
+  max-width: 1000px;
+}
+sept-article-view-full {
+  position: fixed !important;
+  z-index: 6;
+  left: 0% !important;
+  right: 0% !important;
+}

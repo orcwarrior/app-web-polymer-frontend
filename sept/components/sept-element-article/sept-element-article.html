@@ -1,0 +1,71 @@
+<link rel="import" href="../../../bower_components/core-layout/core-layout.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
+<link rel="import" href="../sept-article-model/sept-article-model.html">
+<link rel="import" href="../sept-article-view-tile/sept-article-view-tile.html">
+<link rel="import" href="../sept-article-view-bigtile/sept-article-view-bigtile.html">
+<link rel="import" href="../sept-article-view-full/sept-article-view-full.html">
+
+<link rel="import" href="../../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../../bower_components/core-animated-pages/transitions/hero-transition.html">
+
+<polymer-element name="sept-element-article" attributes="article">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-element-article.css" shim-shadowdom/>
+
+        <sept-article-model id="model"></sept-article-model>
+
+        <core-animated-pages id="aniPages" transitions="hero-transition" selected="0"
+                             on-article-state-change="{{handleTransition}}"
+                             on-core-animated-pages-transition-prepare="{{prepareAni}}">
+            <sept-article-view-tile hero hero-id="art-main-view" article="{{$.model.article}}"></sept-article-view-tile>
+            <sept-article-view-bigtile hero hero-id="art-main-view"
+                                       article="{{$.model.article}}"></sept-article-view-bigtile>
+            <sept-article-view-full hero hero-id="art-main-view"
+                                    article="{{$.model.article}}"></sept-article-view-full>
+        </core-animated-pages>
+    </template>
+
+    <script>
+        Polymer('sept-element-article', {
+            handleTransition   : function (event, detail, sender) {
+                var max = 3;
+                if (!_.isUndefined(detail.targetPage))
+                    this.$.aniPages.selected = (detail.targetPage < max
+                            ) ? detail.targetPage : 0;
+                else if (!_.isUndefined(detail.toggle))
+                    this.$.aniPages.selected = (this.$.aniPages.selected + 1
+                            ) % max;
+                this.fire('articles-changed', {state: this.$.aniPages.selected, stateItem: sender, srcArticle: this},
+                          this);
+
+            },
+            prepareAni         : function () {
+                console.log("ani to be prepared...");
+                switch (this.$.aniPages.selected) {
+                    case 0:
+                        this.$.aniPages.style.width = '500px';
+                        break;
+                    case 1:
+                        this.$.aniPages.style.width = '1000px';
+                        break;
+                    case 2:
+                        this.$.aniPages.style.width = '100%';
+                        break;
+                }
+
+            },
+            closeArticle       : function () {
+                this.$.aniPages.selected = 0;
+            },
+            /* DK: So next tiles moves to next line and not been overlayed */
+            adaptToArticleWidth: function (oldVal, newVal) {
+                // In FF this doesn't work property
+                //                this.$.aniPages.style.width = newVal+'px';
+            },
+            observe            : {
+                '$.aniPages.selectedItem.clientWidth': 'adaptToArticleWidth'
+            }
+        })
+        ;
+    </script>
+</polymer-element>
