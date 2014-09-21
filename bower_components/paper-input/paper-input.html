@@ -92,7 +92,7 @@ the focused and invalid states.
     </div>
 
     <div layout horizontal center hidden?="{{!invalid}}">
-      <div class="error-text" flex auto role="alert" aria-hidden="{{!invalid}}">{{error || validationMessage}}</div>
+      <div class="error-text" flex auto role="alert" aria-hidden="{{!invalid && !error}}">{{error || validationMessage}}</div>
       <core-icon class="error-icon" icon="warning"></core-icon>
     </div>
 

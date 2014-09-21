@@ -12,7 +12,7 @@
         <link rel="stylesheet" type="text/css" href="sept-notifications.css" shim-shadowdom/>
 
 
-        <core-animation id="iconAniHide" duration="400" delay="200" fill="forwards" direction="normal" >
+        <core-animation id="iconAniHide" duration="400" delay="200" fill="forwards" direction="normal">
             <core-animation-keyframe offset="0">
                 <core-animation-prop name="transform" value="scale(1)"></core-animation-prop>
                 <core-animation-prop name="opacity" value="1"></core-animation-prop>
@@ -45,35 +45,39 @@
             </core-animation-keyframe>
         </core-animation>
 
-        <core-collapse id="loginView">
-            <sept-view-login class="toolbar-view"></sept-view-login>
-        </core-collapse>
-        <core-toolbar>
-           <!-- <paper-menu-button icon="account-circle" id="menuIcon">
-                <paper-item icon="drive-script" label="Zaloguj się" on-tap="{{openLoginView}}"></paper-item>
-                <paper-item icon="add-circle" label="Utwórz konto"></paper-item>
-                <paper-item icon="settings-power" label="Wyloguj się"></paper-item>
-            </paper-menu-button>-->
-            <core-icon id="menuIcon" icon="account-circle" on-tap="{{toggleMenu}}"></core-icon>
-            <core-icon id="cancelIcon" icon="cancel" on-tap="{{closeView}}"></core-icon>
-            <core-collapse id="userMenu" horizontal="true">
-                <paper-button icon="drive-script" label="Zaloguj się" on-tap="{{openLoginView}}"></paper-button>
-                <paper-button icon="add-circle" label="Utwórz konto"></paper-button>
-                <paper-button icon="settings-power" label="Wyloguj się"></paper-button>
+            <core-collapse id="loginView">
+                <sept-view-login id="loginViewElement" class="toolbar-view"></sept-view-login>
             </core-collapse>
+            <core-toolbar>
+        <!-- <paper-menu-button icon="account-circle" id="menuIcon">
+             <paper-item icon="drive-script" label="Zaloguj się" on-tap="{{openLoginView}}"></paper-item>
+             <paper-item icon="add-circle" label="Utwórz konto"></paper-item>
+             <paper-item icon="settings-power" label="Wyloguj się"></paper-item>
+         </paper-menu-button>-->
+        <core-icon id="menuIcon" icon="account-circle" on-tap="{{toggleMenu}}"></core-icon>
+        <core-icon id="cancelIcon" icon="cancel" on-tap="{{closeView}}"></core-icon>
+        <core-collapse id="userMenu" horizontal="true">
+            <paper-button hidden?="{{isLoggedIn}}" icon="drive-script" label="Zaloguj się" on-tap="{{openLoginView}}"></paper-button>
+            <paper-button hidden?="{{isLoggedIn}}" icon="add-circle" label="Utwórz konto"></paper-button>
+            <paper-button hidden?="{{!isLoggedIn}}" icon="settings-power" label="Wyloguj się"></paper-button>
+        </core-collapse>
         </core-toolbar>
     </template>
 
     <script>
         Polymer('sept-notifications', {
             ready        : function () {
+                this.addEventListener("notification-view-close", this.closeView);
+                this.isLoggedIn = this.checkIsLoggedIn();
             },
-            toggleMenu : function() {
-               this.$.userMenu.opened = !this.$.userMenu.opened;
+            toggleMenu   : function () {
+                this.$.userMenu.opened = !this.$.userMenu.opened;
             },
+            isLoggedIn : false,
             openedView   : null,
             openLoginView: function () {
                 this.$.loginView.opened = true;
+                this.$.loginViewElement.reopen();
                 this.openedView = this.$.loginView;
                 this.swapIcons(this.openedView === null);
                 this.toggleMenu();
@@ -84,14 +88,20 @@
                 this.openedView = null;
                 this.swapIcons(this.openedView === null);
                 this.toggleMenu();
+                this.isLoggedIn = this.checkIsLoggedIn();
             },
             swapIcons    : function (viewClosed) {
                 var iconShow = this.$.iconAniShow;
                 var iconHide = this.$.iconAniHide;
-                iconShow.target = (viewClosed) ? this.$.menuIcon : this.$.cancelIcon;
-                iconHide.target = (viewClosed) ? this.$.cancelIcon : this.$.menuIcon;
+                iconShow.target = (viewClosed
+                        ) ? this.$.menuIcon : this.$.cancelIcon;
+                iconHide.target = (viewClosed
+                        ) ? this.$.cancelIcon : this.$.menuIcon;
                 iconShow.play();
                 iconHide.play();
+            },
+            checkIsLoggedIn : function() {
+                return septEngine.userSession != null;
             }
         });
     </script>

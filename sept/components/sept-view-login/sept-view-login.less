@@ -1,14 +1,14 @@
 @import '../../../style/global-constants.less';
 
 :host {
+  margin-top: 200px;
+  position: relative;
   display: block;
-  overflow-x: hidden;
   font-family: @fontFamilyMain;
   font-size: @fontSizeSubtitle;
   color: @fontInverseColor;
   padding: 10px;
   & > * {
-    margin-top: 1em;
   }
 }
 
@@ -19,20 +19,20 @@ paper-button {
 }
 
 paper-input {
-  width: 400px;
+  width: 340px;
   font-size: @fontSizeTitle;
-  color: @fontInverseColor !important;
+  color: @fontInverseColor;
   & @{deep} input {
-    color: @fontInverseNormal !important;
+    color: @fontInverseNormal;
   }
   & @{deep} #underlineHighlight.focusedColor {
-    background-color: @fontInverseNormal !important;
+    background-color: @fontInverseNormal;
   }
   & @{deep} #focusedUnderline {
-    background-color: @fontInverseNormal !important;
+    background-color: @fontInverseNormal;
   }
   & @{deep} .focusedColor {
-    color: @fontInverseColor !important;
+    color: @fontInverseColor;
   }
   & @{deep} .cursor {
     color: @fontInverseNormal;
@@ -57,5 +57,20 @@ paper-input @{deep} input {
   &:-ms-input-placeholder {
     /* Internet Explorer 10+ */
     color: @placeholderColor;
+  }
+}
+div#loginForm {
+  position: absolute; top: 0;
+}
+div#successMessage {
+  visibility : hidden;
+  position: absolute; top: 4em;
+  margin-top: auto; margin-bottom: auto;
+  text-align: center;
+  & h1 {
+    font-size: @fontSizeDisplay;
+  }
+  & core-icon {
+    width: 4em; height: 4em; display: inline-block;
   }
 }

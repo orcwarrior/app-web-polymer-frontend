@@ -9,3 +9,21 @@ html, body {
 body @{deep} sept-element-article {
   color: floralwhite;
 }
+body @{deep} paper-input.invalid {
+  color: @fontColorError;
+  & @{deep} #input, & @{deep} #labelText, & @{deep} #input[placeholder] {
+    color: @fontColorError !important;
+  }
+  & @{deep} #underlineHighlight.focusedColor {
+    background-color: @fontColorError;
+  }
+  & @{deep} #focusedUnderline, & @{deep} .unfocused-underline {
+    background-color: @fontColorError;
+  }
+  & @{deep} .focusedColor {
+    color: @fontColorError;
+  }
+  & @{deep} .cursor {
+    color: @fontColorError;
+  }
+}

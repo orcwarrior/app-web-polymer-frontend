@@ -19,3 +19,24 @@ body {
 body /deep/ sept-element-article {
   color: floralwhite;
 }
+body /deep/ paper-input.invalid {
+  color: #f12c2a;
+}
+body /deep/ paper-input.invalid /deep/ #input,
+body /deep/ paper-input.invalid /deep/ #labelText,
+body /deep/ paper-input.invalid /deep/ #input[placeholder] {
+  color: #f12c2a !important;
+}
+body /deep/ paper-input.invalid /deep/ #underlineHighlight.focusedColor {
+  background-color: #f12c2a;
+}
+body /deep/ paper-input.invalid /deep/ #focusedUnderline,
+body /deep/ paper-input.invalid /deep/ .unfocused-underline {
+  background-color: #f12c2a;
+}
+body /deep/ paper-input.invalid /deep/ .focusedColor {
+  color: #f12c2a;
+}
+body /deep/ paper-input.invalid /deep/ .cursor {
+  color: #f12c2a;
+}
