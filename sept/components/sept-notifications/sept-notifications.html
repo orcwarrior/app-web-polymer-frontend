@@ -58,12 +58,16 @@
                  <paper-item icon="add-circle" label="Utwórz konto"></paper-item>
                  <paper-item icon="settings-power" label="Wyloguj się"></paper-item>
              </paper-menu-button>-->
-            <core-icon id="menuIcon" icon="account-circle" on-tap="{{toggleMenu}}"></core-icon>
+            <core-icon id="menuIcon" icon="account-circle" on-tap="{{toggleAccountMenu}}"></core-icon>
             <core-icon id="cancelIcon" icon="cancel" on-tap="{{closeView}}"></core-icon>
             <core-collapse id="userMenu" horizontal="true">
                 <paper-button hidden?="{{isLoggedIn}}" icon="drive-script" label="Zaloguj się" on-tap="{{openLoginView}}"></paper-button>
                 <paper-button hidden?="{{isLoggedIn}}" icon="add-circle" label="Utwórz konto" on-tap="{{openRegisterView}}"></paper-button>
-                <paper-button hidden?="{{!isLoggedIn}}" icon="settings-power" label="Wyloguj się"></paper-button>
+                <paper-button hidden?="{{!isLoggedIn}}" icon="settings-power" label="Wyloguj się" on-tap="{{userLogout}}"></paper-button>
+            </core-collapse>
+
+            <core-collapse id="userLogoutMsg" horizontal="true">
+                <paper-button icon="check" label="Pomyślnie wylogowano"></paper-button>
             </core-collapse>
         </core-toolbar>
     </template>
@@ -74,7 +78,7 @@
                 this.addEventListener("notification-view-close", this.closeView);
                 this.isLoggedIn = this.checkIsLoggedIn();
             },
-            toggleMenu     : function () {
+            toggleAccountMenu     : function () {
                 this.$.userMenu.opened = !this.$.userMenu.opened;
             },
             isLoggedIn     : false,
@@ -84,21 +88,32 @@
                 this.$.loginViewElement.reopen();
                 this.openedView = this.$.loginView;
                 this.swapIcons(this.openedView === null);
-                this.toggleMenu();
+                this.toggleAccountMenu();
             },
             openRegisterView  : function () {
                 this.$.registerView.opened = true;
                 this.$.registerViewElement.reopen();
                 this.openedView = this.$.registerView;
                 this.swapIcons(this.openedView === null);
-                this.toggleMenu();
+                this.toggleAccountMenu();
             },
             closeView      : function () {
                 if (this.openedView !== null)
                     this.openedView.opened = false;
                 this.openedView = null;
                 this.swapIcons(this.openedView === null);
-                this.toggleMenu();
+                this.toggleAccountMenu();
+                this.isLoggedIn = this.checkIsLoggedIn();
+            },
+            checkIsLoggedIn: function () {
+                return septEngine.user.isLoggedIn();
+            },
+            userLogout : function () {
+                septEngine.user.logout();
+                this.toggleAccountMenu(); // close user menu
+                this.$.userLogoutMsg.opened = true;
+                var self = this;
+                _.delay(function() {self.$.userLogoutMsg.opened = false;}, 3000);
                 this.isLoggedIn = this.checkIsLoggedIn();
             },
             swapIcons      : function (viewClosed) {
@@ -110,9 +125,6 @@
                         ) ? this.$.cancelIcon : this.$.menuIcon;
                 iconShow.play();
                 iconHide.play();
-            },
-            checkIsLoggedIn: function () {
-                return septEngine.userSession != null;
             }
         });
     </script>

@@ -37,7 +37,7 @@
                     this.$.usernameInput.error = this.$.passwordInput.error = "Błędny login lub hasło.";
                 }
                 else {
-                    septEngine.userSession = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
+                    septEngine.user.session = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
                     this.message = "Pomyślnie zalogowano";
                     this.playSuccessAni(); // super method
                     this.closeView();

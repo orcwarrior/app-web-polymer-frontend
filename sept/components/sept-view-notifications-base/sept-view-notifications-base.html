@@ -45,7 +45,7 @@
 
     <script>
         Polymer('sept-view-notifications-base', {
-            closeViewDelay: 1500,
+            closeViewDelay: 2500,
             closeView : function() {
                 var self = this;
                 _.delay( function() {self.fire('notification-view-close', {view: self}, self) }, this.closeViewDelay);

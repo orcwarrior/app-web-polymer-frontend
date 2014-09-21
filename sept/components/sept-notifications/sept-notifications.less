@@ -31,6 +31,9 @@ paper-menu-button {
   height: 50px; width: 0;
   overflow-y: hidden;
 }
+#userLogoutMsg {
+  margin-top: -8px;
+}
 paper-menu-button:shadow core-popup-menu {
   margin-left: 50px;
   overflow: hidden !important;
@@ -56,11 +59,13 @@ paper-button {
 
 /* Views*/
 core-collapse {
-  display: block;
+  display: block; height:  35px; display: inline-block; overflow-x: visible;
+  text-align: left;
   & .toolbar-view {
+    float: center;
     min-width: 350px; max-width: 50%; width: 350px;
     margin-left: auto; margin-right: auto;
     padding-top: 7%;
-    margin-bottom: 7%;
+    padding-bottom: 7%;
   }
 }

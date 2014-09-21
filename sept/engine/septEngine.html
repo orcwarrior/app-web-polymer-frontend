@@ -11,10 +11,17 @@ Created by orcwarrior on 2014-09-04.
                 'FULL' : 2
             }
         },
-        userSession : null,
         domain : {},
         requestHelper : {},
-        mocks     : {}
+        mocks     : {},
+        user: {
+            session: null,
+            logout : function () {
+                this.session = null;
+                // TODO: Clear session cookie (when implemented)
+            },
+            isLoggedIn : function() {return this.session != null;}
+        }
     };
 </script>
 <!-- Libraries -->

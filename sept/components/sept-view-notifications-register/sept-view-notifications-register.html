@@ -4,6 +4,7 @@
 <link rel="import" href="../sept-util-request/sept-util-request.html">
 <link rel="import" href="../sept-view-notifications-base/sept-view-notifications-base.html">
 <link rel="import" href="../../../bower_components/core-animation/core-animation-group.html">
+<link rel="import" href="../../../bower_components/core-icons/social-icons.html">
 
 <polymer-element name="sept-view-notifications-register" extends="sept-view-notifications-base">
     <template>
@@ -14,13 +15,13 @@
 
         <div id="actionForm" on-input="{{clearInvalid}}">
             <paper-input validateImmediately="false" required floatingLabel id="usernameInput"
-                         placeholder="NAZWA UŻYTKOWNIKA" value="{{$.loginRequest.bind.username}}"></paper-input>
+                         placeholder="NAZWA UŻYTKOWNIKA" value="{{$.registerRequest.bind.username}}"></paper-input>
 
             <paper-input validateImmediately="false" required floatingLabel id="emailInput"
-            placeholder="ADRES EMAIL" type="email" value="{{$.loginRequest.bind.username}}"></paper-input>
+            placeholder="ADRES EMAIL" type="email" value="{{$.registerRequest.bind.email}}"></paper-input>
 
             <paper-input validateImmediately="false" required floatingLabel id="passwordInput"
-            placeholder="HASŁO" type="password" value="{{$.loginRequest.bind.password}}"></paper-input>
+            placeholder="HASŁO" type="password" value="{{$.registerRequest.bind.password}}"></paper-input>
 
             <paper-input validateImmediately="false" required floatingLabel id="passwordAgainInput"
             placeholder="POWTÓRZ HASŁO" type="password"></paper-input>
@@ -28,7 +29,7 @@
             <paper-button label="Utwórz konto" raisedButton on-tap="{{sendRegisterRequest}}"></paper-button>
         </div>
         <div id="successMessage">
-            <core-icon icon="check-box-outline"></core-icon>
+            <core-icon icon="social:person-add"></core-icon>
             <h1>{{message}}</h1>
         </div>
     </template>
@@ -43,13 +44,13 @@
                 }
             },
             processRegisterResponse: function (oldval, newVal) {
-                if (this.$.loginRequest.responseStatus.type === septEngine.domain.RESTResponseStatusType.fail) {
-                    //this.message = "Nieudało się zalogować, \n powód: " + newVal.headers.status.message;
+                if (this.$.registerRequest.responseStatus.type === septEngine.domain.RESTResponseStatusType.fail) {
+                    this.$.usernameInput.setCustomValidity(newVal.headers.status.message);
                     this.formError = true;
                 }
                 else {
-                    septEngine.userSession = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
-                    this.message = "Utworzono nowe konto";
+                    septEngine.user.session = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
+                    this.message = "Utworzono nowe konto.";
                     this.playSuccessAni(); // super method
                     this.closeView();
                 }
@@ -67,6 +68,7 @@
             },
             allFieldsValid         : function () {
                 var allValid = true;
+                this.$.usernameInput.setCustomValidity();
                 allValid &= this.$.usernameInput.checkValidity();
                 allValid &= this.$.emailInput.checkValidity();
                 // This workaround is needed:
