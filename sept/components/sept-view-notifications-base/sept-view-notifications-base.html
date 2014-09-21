@@ -1,0 +1,62 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
+<link rel="import" href="../../../bower_components/core-animation/core-animation-group.html">
+
+<polymer-element name="sept-view-notifications-base">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-view-notifications-base.css" shim-shadowdom/>
+
+        <core-animation-group id="actionSuccess">
+            <core-animation id="actionSuccessForm" duration="200" delay="200" fill="forwards" direction="normal"
+                            target="{{$.actionForm}}">
+                <core-animation-keyframe offset="0">
+                    <core-animation-prop name="transform" value="scale(1)"></core-animation-prop>
+                    <core-animation-prop name="opacity" value="1"></core-animation-prop>
+                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe offset="0.4">
+                    <core-animation-prop name="transform" value="scale(1.4)"></core-animation-prop>
+                    <core-animation-prop name="opacity" value="1"></core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe offset="1">
+                    <core-animation-prop name="transform" value="scale(0)"></core-animation-prop>
+                    <core-animation-prop name="opacity" value="0"></core-animation-prop>
+                    <core-animation-prop name="visibility" value="collapse"></core-animation-prop>
+                </core-animation-keyframe>
+            </core-animation>
+            <core-animation id="actionSuccessMessage" duration="200" delay="300" fill="both" direction="normal"
+                            target="{{$.successMessage}}">
+                <core-animation-keyframe offset="0">
+                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
+                    <core-animation-prop name="transform" value="translateY(-600px) scale(2)"></core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe offset="0.333">
+                    <core-animation-prop name="transform" value="translateY(-400px) scale(1)"></core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe offset="1">
+                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
+                    <core-animation-prop name="transform" value="translateY(0px) scale(1)"></core-animation-prop>
+                </core-animation-keyframe>
+            </core-animation>
+        </core-animation-group>
+    </template>
+
+    <script>
+        Polymer('sept-view-notifications-base', {
+            closeViewDelay: 1500,
+            closeView : function() {
+                var self = this;
+                _.delay( function() {self.fire('notification-view-close', {view: self}, self) }, this.closeViewDelay);
+            },
+            playSuccessAni : function () {
+              this.$.actionSuccess.play();
+            },
+            clearInvalid        : function () { this.formError = false; },
+            reopen              : function () {
+                this.$.actionSuccess.cancel();
+            }
+        });
+    </script>
+</polymer-element>

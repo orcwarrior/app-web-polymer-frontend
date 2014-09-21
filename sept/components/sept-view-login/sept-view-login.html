@@ -2,90 +2,48 @@
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/core-icon/core-icon.html">
 <link rel="import" href="../sept-util-request/sept-util-request.html">
+<link rel="import" href="../sept-view-notifications-base/sept-view-notifications-base.html">
 <link rel="import" href="../../../bower_components/core-animation/core-animation-group.html">
 
-<polymer-element name="sept-view-login">
+<polymer-element name="sept-view-login" extends="sept-view-notifications-base" >
     <template>
         <link rel="stylesheet" type="text/css" href="sept-view-login.css" shim-shadowdom/>
+        <link rel="stylesheet" type="text/css" href="../sept-view-notifications-base/sept-view-notifications-base.css" shim-shadowdom/>
         <sept-util-request id="loginRequest" operation="RESTOperation.login"></sept-util-request>
 
-        <core-animation-group id="loginSuccess">
-            <core-animation id="loginSuccessForm" duration="200" delay="200" fill="forwards" direction="normal"
-                            target="{{$.loginForm}}">
-                <core-animation-keyframe offset="0">
-                    <core-animation-prop name="transform" value="scale(1)"></core-animation-prop>
-                    <core-animation-prop name="opacity" value="1"></core-animation-prop>
-                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
-                </core-animation-keyframe>
-                <core-animation-keyframe offset="0.4">
-                    <core-animation-prop name="transform" value="scale(1.2)"></core-animation-prop>
-                    <core-animation-prop name="opacity" value="1"></core-animation-prop>
-                </core-animation-keyframe>
-                <core-animation-keyframe offset="1">
-                    <core-animation-prop name="transform" value="scale(0)"></core-animation-prop>
-                    <core-animation-prop name="opacity" value="0"></core-animation-prop>
-                    <core-animation-prop name="visibility" value="collapse"></core-animation-prop>
-                </core-animation-keyframe>
-            </core-animation>
-            <core-animation id="loginSuccessMessage" duration="200" delay="300" fill="both" direction="normal"
-                            target="{{$.successMessage}}">
-                <core-animation-keyframe offset="0">
-                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
-                    <core-animation-prop name="transform" value="translateY(-600px) scale(2)"></core-animation-prop>
-                </core-animation-keyframe>
-                <core-animation-keyframe offset="0.333">
-                    <core-animation-prop name="transform" value="translateY(-400px) scale(1)"></core-animation-prop>
-                </core-animation-keyframe>
-                <core-animation-keyframe offset="1">
-                    <core-animation-prop name="visibility" value="visible"></core-animation-prop>
-                    <core-animation-prop name="transform" value="translateY(0px) scale(1)"></core-animation-prop>
-                </core-animation-keyframe>
-            </core-animation>
-        </core-animation-group>
-        <div id="loginForm">
-            <paper-input id="usernameInput" invalid?="{{loginError == true}}" on-input="{{clearInvalid}}"
-            placeholder="login" value="{{$.loginRequest.bind.username}}"></paper-input>
-            <paper-input id="passwordInput" invalid?="{{loginError == true}}" on-input="{{clearInvalid}}"
-            placeholder="hasło" type="password" value="{{$.loginRequest.bind.password}}"></paper-input>
+        <div id="actionForm">
+            <paper-input id="usernameInput" floatingLabel invalid?="{{loginError == true}}" on-input="{{clearInvalid}}"
+            placeholder="NAZWA UŻYTKOWNIKA" value="{{$.loginRequest.bind.username}}"></paper-input>
+            <paper-input id="passwordInput" floatingLabel invalid?="{{loginError == true}}" on-input="{{clearInvalid}}"
+            placeholder="HASŁO" type="password" value="{{$.loginRequest.bind.password}}"></paper-input>
             <paper-button label="Zaloguj się" raisedButton on-tap="{{sendLoginRequest}}"></paper-button>
         </div>
         <div id="successMessage">
-            <core-icon icon="check-box-outline" size="128"></core-icon><h1>{{message}}</h1>
+            <core-icon icon="check-box-outline"></core-icon><h1>{{message}}</h1>
         </div>
     </template>
 
     <script>
         Polymer('sept-view-login', {
             message             : '',
-            loginError          : false,
-            ready               : function () {
-                this.$.loginForm.style = "";
-            },
+            formError          : false,
             sendLoginRequest    : function () {
                 this.$.loginRequest.go();
             },
             processLoginResponse: function (oldval, newVal) {
                 if (this.$.loginRequest.responseStatus.type === septEngine.domain.RESTResponseStatusType.fail) {
                     //this.message = "Nieudało się zalogować, \n powód: " + newVal.headers.status.message;
-                    this.loginError = true;
+                    this.formError = true;
                     this.$.usernameInput.error = this.$.passwordInput.error = "Błędny login lub hasło.";
                 }
                 else {
                     septEngine.userSession = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
                     this.message = "Pomyślnie zalogowano";
-                    this.$.loginSuccess.play();
+                    this.playSuccessAni(); // super method
                     this.closeView();
                 }
             },
-            closeView : function() {
-                var self = this;
-                _.delay( function() {self.fire('notification-view-close', {view: self}, self) }, 1500);
-              //  _.delay( this.fire('notification-view-close', {view: this}), 500);
-            },
-            clearInvalid        : function () { this.loginError = false; },
-            reopen              : function () {
-                this.$.loginSuccess.cancel();
-            },
+            clearInvalid        : function () { this.formError = false; },
             observe             : {
                 '$.loginRequest.response': 'processLoginResponse'
             }
