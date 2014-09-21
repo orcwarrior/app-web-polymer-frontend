@@ -1,0 +1,91 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
+<link rel="import" href="../sept-view-notifications-base/sept-view-notifications-base.html">
+<link rel="import" href="../../../bower_components/core-animation/core-animation-group.html">
+
+<polymer-element name="sept-view-notifications-register" extends="sept-view-notifications-base">
+    <template>
+        <link rel="stylesheet" type="text/css" href="sept-view-notifications-register.css" shim-shadowdom/>
+        <link rel="stylesheet" type="text/css" href="../sept-view-notifications-base/sept-view-notifications-base.css"
+              shim-shadowdom/>
+        <sept-util-request id="registerRequest" operation="RESTOperation.register"></sept-util-request>
+
+        <div id="actionForm" on-input="{{clearInvalid}}">
+            <paper-input validateImmediately="false" required floatingLabel id="usernameInput"
+                         placeholder="NAZWA UŻYTKOWNIKA" value="{{$.loginRequest.bind.username}}"></paper-input>
+
+            <paper-input validateImmediately="false" required floatingLabel id="emailInput"
+            placeholder="ADRES EMAIL" type="email" value="{{$.loginRequest.bind.username}}"></paper-input>
+
+            <paper-input validateImmediately="false" required floatingLabel id="passwordInput"
+            placeholder="HASŁO" type="password" value="{{$.loginRequest.bind.password}}"></paper-input>
+
+            <paper-input validateImmediately="false" required floatingLabel id="passwordAgainInput"
+            placeholder="POWTÓRZ HASŁO" type="password"></paper-input>
+
+            <paper-button label="Utwórz konto" raisedButton on-tap="{{sendRegisterRequest}}"></paper-button>
+        </div>
+        <div id="successMessage">
+            <core-icon icon="check-box-outline"></core-icon>
+            <h1>{{message}}</h1>
+        </div>
+    </template>
+
+    <script>
+        Polymer('sept-view-notifications-register', {
+            message                : '',
+            formError              : false,
+            sendRegisterRequest    : function () {
+                if (this.allFieldsValid()) {
+                    this.$.registerRequest.go();
+                }
+            },
+            processRegisterResponse: function (oldval, newVal) {
+                if (this.$.loginRequest.responseStatus.type === septEngine.domain.RESTResponseStatusType.fail) {
+                    //this.message = "Nieudało się zalogować, \n powód: " + newVal.headers.status.message;
+                    this.formError = true;
+                }
+                else {
+                    septEngine.userSession = new septEngine.domain.session(newVal.uuid, newVal.user, newVal.created);
+                    this.message = "Utworzono nowe konto";
+                    this.playSuccessAni(); // super method
+                    this.closeView();
+                }
+            },
+            validatePassword       : function () {
+                if (this.$.passwordInput.inputValue !== this.$.passwordAgainInput.inputValue) {
+                    var message = "Wpisane hasła nie są takie same!";
+                    this.$.passwordInput.setCustomValidity(message);
+                    this.$.passwordAgainInput.setCustomValidity(message);
+                    return false;
+                }
+                this.$.passwordInput.setCustomValidity();
+                this.$.passwordAgainInput.setCustomValidity();
+                return true;
+            },
+            allFieldsValid         : function () {
+                var allValid = true;
+                allValid &= this.$.usernameInput.checkValidity();
+                allValid &= this.$.emailInput.checkValidity();
+                // This workaround is needed:
+                if (this.validatePassword()) {
+                    this.$.passwordInput.invalid = this.$.passwordAgainInput.invalid = false;
+                } else { allValid = false; }
+                allValid &= this.$.passwordInput.checkValidity();
+                allValid &= this.$.passwordAgainInput.checkValidity();
+                return allValid;
+            },
+            clearInvalid           : function (event, detail, sender) {
+                if (event.srcElement.type == "email")
+                    event.srcElement.checkValidity();
+                else
+                    event.srcElement.invalid = false;
+            },
+            observe                : {
+                '$.registerRequest.response': 'processRegisterResponse'
+            }
+        });
+    </script>
+</polymer-element>

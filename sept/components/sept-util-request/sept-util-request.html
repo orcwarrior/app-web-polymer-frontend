@@ -55,7 +55,7 @@
                         this.processRequestModel = septEngine.requestHelper[newVal].processRequestModel;
                 }
                 else
-                    throw new Error("Request helper: " + newVal + " not available in septEngine.requestHelper");
+                    console.warn("Request helper: " + newVal + " not available in septEngine.requestHelper");
             },
             responseRawChanged: function (oldVal, newVal) {
                 if (newVal.headers.status.type == septEngine.domain.RESTResponseStatusType.success)
