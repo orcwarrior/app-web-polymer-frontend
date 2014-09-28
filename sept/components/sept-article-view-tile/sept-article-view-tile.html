@@ -8,7 +8,7 @@
             <div class="bg-gradient" hero-id="hero-art-gradient" hero></div>
             <section hero-id="hero-art-content" hero>
                 <h1 hero-id="hero-art-title" hero>{{article.title}}</h1>
-                <span hero-id="hero-art-author" hero>{{article.author}}</span>
+                <span id="author" hero-id="hero-art-author" hero>{{article.author}}</span>
                 <p id="firstParagraph" hero-id="hero-art-1stparagraph" hero></p>
             </section>
         </div>
@@ -17,9 +17,7 @@
     <script>
         Polymer('sept-article-view-tile', {
             articleChanged: function (oldVal, newVal) {
-                var bg = this.shadowRoot.querySelector('div.bg-image');
-                bg.style.backgroundImage = "url(\'" + this.article.image + "\')";
-                this.$.firstParagraph.innerHTML = this.article.firstParagraph;
+                _.bind(septEngine.article.commonUpdateArticle, this)();
             },
             enlargeArticle : function() {
                 this.fire('article-state-change', {targetPage: 1}, this);

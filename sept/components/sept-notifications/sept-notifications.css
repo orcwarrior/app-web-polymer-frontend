@@ -57,7 +57,7 @@ paper-menu-button /deep/ core-menu {
   overflow: auto !important;
 }
 paper-button {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', 'Comic Sans MS';
   font-size: 16px;
   color: rgba(255, 255, 255, 0.87);
 }

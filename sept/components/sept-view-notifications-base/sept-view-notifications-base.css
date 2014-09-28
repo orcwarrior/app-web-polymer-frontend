@@ -10,15 +10,12 @@
 /* font colors */
 /* Articles */
 :host {
+  position: relative;
   display: block;
-  overflow-x: hidden;
   font-family: 'Roboto', 'Comic Sans MS';
   font-size: 18px;
   color: #ffffff;
   padding: 10px;
-}
-:host > * {
-  margin-top: 1em;
 }
 paper-button {
   background-color: #444444 !important;
@@ -26,24 +23,45 @@ paper-button {
   font-size: 22px;
 }
 paper-input {
-  width: 400px;
+  width: 340px;
   font-size: 22px;
-  color: #ffffff !important;
+  color: rgba(255, 255, 255, 0.46);
+  /* label */
+  /* underline */
+  /* underline hilight / focused*/
+}
+paper-input:not(.invalid) {
+  margin-bottom: 1em;
 }
 paper-input /deep/ input {
-  color: rgba(255, 255, 255, 0.87) !important;
+  color: rgba(255, 255, 255, 0.87);
+}
+paper-input /deep/ .label {
+  color: rgba(255, 255, 255, 0.46);
+}
+paper-input /deep/ .floated-label {
+  color: rgba(255, 255, 255, 0.46);
+}
+paper-input[focused] /deep/ .floated-label {
+  color: rgba(255, 255, 255, 0.87);
+}
+paper-input /deep/ .unfocused-underline {
+  background-color: rgba(255, 255, 255, 0.46);
 }
 paper-input /deep/ #underlineHighlight.focusedColor {
-  background-color: rgba(255, 255, 255, 0.87) !important;
+  background-color: rgba(255, 255, 255, 0.87);
 }
 paper-input /deep/ #focusedUnderline {
-  background-color: rgba(255, 255, 255, 0.87) !important;
+  background-color: rgba(255, 255, 255, 0.87);
 }
 paper-input /deep/ .focusedColor {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 paper-input /deep/ .cursor {
   color: rgba(255, 255, 255, 0.87);
+}
+paper-input /deep/ .error-text {
+  color: #f12c2a;
 }
 paper-input /deep/ input::-webkit-input-placeholder {
   /* WebKit browsers */
@@ -62,4 +80,20 @@ paper-input /deep/ input::-moz-placeholder {
 paper-input /deep/ input:-ms-input-placeholder {
   /* Internet Explorer 10+ */
   color: #dddddd;
+}
+div#successMessage {
+  visibility: hidden;
+  position: absolute;
+  top: 5em;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+}
+div#successMessage h1 {
+  font-size: 38px;
+}
+div#successMessage core-icon {
+  width: 5em;
+  height: 5em;
+  display: inline-block;
 }

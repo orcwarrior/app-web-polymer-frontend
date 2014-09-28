@@ -10,7 +10,7 @@
 /* font colors */
 /* Articles */
 :host {
-  font: 'Roboto', sans-serif;
+  font: 'Roboto', 'Comic Sans MS';
 }
 core-header-panel {
   display: flex;

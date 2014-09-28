@@ -21,9 +21,7 @@
             ready         : function () {
             },
             articleChanged: function (oldVal, newVal) {
-                var bg = this.shadowRoot.querySelector('div.bg-image');
-                bg.style.backgroundImage = "url(\'" + this.article.image + "\')";
-                this.$.firstParagraph.innerHTML = this.article.firstParagraph;
+                _.bind(septEngine.article.commonUpdateArticle, this)();
             },
             openArticle   : function () {
                 this.fire('article-state-change', {targetPage: 2}, this);

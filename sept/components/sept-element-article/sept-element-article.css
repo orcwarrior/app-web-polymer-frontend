@@ -30,3 +30,26 @@ sept-article-view-full {
   left: 0% !important;
   right: 0% !important;
 }
+/* style shared between different states of article */
+:host /deep/ #author {
+  float: right;
+  font-family: 'Roboto', 'Comic Sans MS';
+  font-size: 22px;
+  font-weight: 300 !important;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.81);
+}
+:host /deep/ h1 {
+  float: right;
+  text-align: right;
+  color: #ffe2db;
+  font-family: 'Roboto', 'Comic Sans MS';
+  font-size: 38px;
+  font-weight: 300;
+}
+:host /deep/ #firstParagraph,
+:host /deep/ #restOfText {
+  font-family: 'Roboto', 'Comic Sans MS';
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.81);
+}

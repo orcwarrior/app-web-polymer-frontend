@@ -12,16 +12,18 @@
     <template>
         <link rel="stylesheet" type="text/css" href="sept-element-article.css" shim-shadowdom/>
 
-        <sept-article-model id="model"></sept-article-model>
+        <!-- mocked wiki-api model OLD -->
+        <!--<sept-article-model id="model"></sept-article-model>-->
 
         <core-animated-pages id="aniPages" transitions="hero-transition" selected="0"
                              on-article-state-change="{{handleTransition}}"
+                             on-core-animated-pages-transition-end="{{transitionEnd}}"
                              on-core-animated-pages-transition-prepare="{{prepareAni}}">
-            <sept-article-view-tile hero hero-id="art-main-view" article="{{$.model.article}}"></sept-article-view-tile>
+            <sept-article-view-tile hero hero-id="art-main-view" article="{{article}}"></sept-article-view-tile>
             <sept-article-view-bigtile hero hero-id="art-main-view"
-                                       article="{{$.model.article}}"></sept-article-view-bigtile>
+                                       article="{{article}}"></sept-article-view-bigtile>
             <sept-article-view-full hero hero-id="art-main-view"
-                                    article="{{$.model.article}}"></sept-article-view-full>
+                                    article="{{article}}"></sept-article-view-full>
         </core-animated-pages>
     </template>
 
@@ -33,11 +35,13 @@
                     this.$.aniPages.selected = (detail.targetPage < max
                             ) ? detail.targetPage : 0;
                 else if (!_.isUndefined(detail.toggle))
-                    this.$.aniPages.selected = (this.$.aniPages.selected + 1
-                            ) % max;
+                    this.$.aniPages.selected = (this.$.aniPages.selected + 1) % max;
                 this.fire('articles-changed', {state: this.$.aniPages.selected, stateItem: sender, srcArticle: this},
                           this);
-
+                // call activate on selected element
+                var selectedArticleState = this.$.aniPages.items[ this.$.aniPages.selected ];
+                if (!_.isUndefined(selectedArticleState.activateArticleState))
+                    selectedArticleState.activateArticleState();
             },
             prepareAni         : function () {
                 console.log("ani to be prepared...");
@@ -52,6 +56,12 @@
                         this.$.aniPages.style.width = '100%';
                         break;
                 }
+
+            },
+            transitionEnd : function () {
+                var selectedArticleState = this.$.aniPages.items[ this.$.aniPages.selected ];
+                if (!_.isUndefined(selectedArticleState.transitionFinished))
+                    selectedArticleState.transitionFinished();
 
             },
             closeArticle       : function () {

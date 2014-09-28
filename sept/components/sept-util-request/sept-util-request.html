@@ -16,7 +16,7 @@
             },
             go         : function () {
                 this.model = this.initModel();
-                _.overwriteExisting(this.bind, this.model);
+                this.applyBindings();
                 this.body = this.createRESTRequest(this.processRequestModel(this.model));
                 if (_.isObject(this.body))
                     this.body = JSON.stringify(this.body);
@@ -26,7 +26,6 @@
             withSession: true,
             model      : null,
             bind       : {}, //{reflect: true, value: null},
-            response   : null,
 
             /** Init model should be overriden in every instance of sept-util-request element */
             initModel       : function () { return {}; },
@@ -67,6 +66,12 @@
             },
             bodyChanged    : function () {
                 if (this.auto === "true" || this.auto === "") this.go();
+            },
+            applyBindings     : function () {
+                if (!_.isEmpty(this.model))
+                    _.overwriteExisting(this.bind, this.model);
+                else
+                    this.model = this.bind;
             },
             checkAutoGo       : function () { if (this.auto === "true" || this.auto === "") this.go(); }
         });

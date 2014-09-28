@@ -21,3 +21,27 @@ sept-article-view-full {
     left: 0% !important;
     right: 0% !important;
 }
+
+/* style shared between different states of article */
+:host @{deep} #author {
+  float: right;
+  font-family: @fontFamilyMain;
+  font-size: @fontSizeTitle;
+  font-weight: 300 !important;
+  text-transform: uppercase;
+  color: @fontColorNormal;
+
+}
+:host @{deep} h1 {
+  float: right; text-align: right;
+  color: @articleTitleFontColor;
+  color: rgb(255, 226, 219);
+  font-family: @fontFamilyMain;
+  font-size: @fontSizeDisplay;
+  font-weight: 300;
+}
+:host @{deep} #firstParagraph, :host @{deep} #restOfText {
+  font-family: @fontFamilyMain;
+  font-size: @fontSizeSubtitle;
+  color: @fontColorNormal;
+}

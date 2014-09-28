@@ -3,24 +3,31 @@ Created by orcwarrior on 2014-09-04.
 -->
 <script>
     window.septEngine = {
-        globals  : {
-            RESTfulServiceUrl : 'http://localhost:802/sept-api', // 'http://localhost:8085/app/api/',
-            articleStates : {
-                'TILE' : 0,
-                'BIGTILE' : 1,
-                'FULL' : 2
+        globals      : {
+            RESTfulServiceUrl: 'http://localhost:802/sept-api', // 'http://localhost:8085/app/api/',
+            articleStates    : {
+                'TILE'   : 0,
+                'BIGTILE': 1,
+                'FULL'   : 2
             }
         },
-        domain : {},
-        requestHelper : {},
-        mocks     : {},
-        user: {
-            session: null,
-            logout : function () {
+        domain       : {},
+        requestHelper: {},
+        mocks        : {},
+        user         : {
+            session   : null,
+            logout    : function () {
                 this.session = null;
                 // TODO: Clear session cookie (when implemented)
             },
-            isLoggedIn : function() {return this.session != null;}
+            isLoggedIn: function () {return this.session != null;}
+        },
+        article: {
+            commonUpdateArticle: function () {
+            var bg = this.shadowRoot.querySelector('div.bg-image');
+            bg.style.backgroundImage = "url(\'" + this.article.imageUrl + "\')";
+            this.$.firstParagraph.innerHTML = this.article.firstParagraph;
+            }
         }
     };
 </script>

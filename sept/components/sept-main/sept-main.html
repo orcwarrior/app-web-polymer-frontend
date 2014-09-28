@@ -4,26 +4,12 @@
 <polymer-element name="sept-main">
     <template>
         <link rel="stylesheet" type="text/css" href="sept-main.css" shim-shadowdom/>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
-        <sept-element-article></sept-element-article>
+
+        <sept-util-request id="articlesListRequest" operation="RESTOperation.getArticles" auto></sept-util-request>
+
+        <template repeat="{{article in articles}}" id="articlesTemplate">
+            <sept-element-article article="{{article}}"></sept-element-article>
+        </template>
     </template>
 
     <script>
@@ -34,15 +20,16 @@
                     self.recalculateGrid();
                 }, true);
                 this.addEventListener("articles-changed", this.articlesChangedEvent);
-                this.markLastRealArticle();
-                this.recalculateGrid();
-                // TODO: Temporary, sth more elegant needed:
-                _.delay(function () { self.recalculateGrid(); }, 3000);
+                if (this.markLastRealArticle()) {
+                    this.recalculateGrid();
+                    // TODO: Temporary, sth more elegant needed:
+                    _.delay(function () { self.recalculateGrid(); }, 3000);
+                }
             },
             lastEventArticle    : null,
             articlesChangedEvent: function (event, detail, sender) {
                 /* Disable main scrollbar if fullscreen state is set */
-                if(event.detail.state == septEngine.globals.articleStates.FULL) {
+                if (event.detail.state == septEngine.globals.articleStates.FULL) {
                     document.body.style.overflow = "hidden";
                 }
                 else {
@@ -78,7 +65,19 @@
             },
             markLastRealArticle : function () {
                 this.articlesHTML = this.shadowRoot.querySelectorAll('sept-element-article');
-                _.last(this.articlesHTML).className += " lastArticle";
+                if (!_.isUndefined(this.articleHTML)) {
+                    var lastArticle = _.last(this.articlesHTML);
+                    lastArticle.className += " lastArticle";
+                    return true;
+                }
+                return false;
+            },
+            /* bind articles */
+            updateArticles      : function (oldVal, newVal) {
+                this.$.articlesTemplate.model = newVal;
+            },
+            observe             : {
+                '$.articlesListRequest.response': 'updateArticles'
             }
         });
     </script>

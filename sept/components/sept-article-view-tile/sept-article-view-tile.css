@@ -30,24 +30,13 @@ section h1 {
   position: absolute;
   bottom: 0.1em;
   right: 20px;
-  float: right;
-  text-align: right;
-  color: #ffe2db;
-  font-family: 'Roboto', sans-serif;
-  font-size: 38px;
-  font-weight: 300;
 }
-section span {
+section span#author {
   z-index: 4;
-  float: right;
   position: absolute;
   bottom: 0.5em;
   right: 20px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 18px;
-  font-weight: 100;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 0.46);
 }
 section p#firstParagraph {
   z-index: 1;
