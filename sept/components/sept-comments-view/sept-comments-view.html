@@ -4,8 +4,12 @@
 <link rel="import" href="../../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../../bower_components/core-collapse/core-collapse.html">
 <link rel="import" href="../../../bower_components/core-icons/communication-icons.html">
+<link rel="import" href="../../../bower_components/core-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
+<link rel="import" href="../div-html/div-html.html">
 
-<polymer-element name="sept-comments-view" attributes="comments">
+<polymer-element name="sept-comments-view" attributes="comments articleId">
     <template>
         <link rel="stylesheet" type="text/css" href="sept-comments-view.css" shim-shadowdom/>
         <section id="commentsSection" class="bottom" on-core-resize="{{commentsStateChangeEnd}}">
@@ -18,27 +22,29 @@
             </section>
             <core-collapse id="commentsDropdown">
                 <template repeat="{{comment in comments}}">
-                    <div id="comment">
-                        <div id="commentWrapper">
-                            <div id="commentInfos">
-                                <div id="commentAuthor">{{comment.author}}</div>
-                                <div id="commentDate">{{comment.created}}</div>
+                    <div class="comment">
+                        <div class="commentWrapper">
+                            <div class="commentInfos">
+                                <div class="commentAuthor">{{comment.author}}</div>
+                                <div class="commentDate">{{comment.created}}</div>
                             </div>
-                            <div id="commentContent">{{comment.content}}</div>
+                            <div-html initHtml="{{comment.content}}" class="commentContent"></div-html>
                         </div>
                     </div>
                 </template>
-                <div id="commentWriter">
-                    <div id="comment">
-                        <div id="commentWrapper">
-                            <div id="commentInfos">
-                                <div id="commentAuthor">{{currentUserName}}</div>
-                                <div id="commentDate"></div>
+                <div class="commentWriter"  hidden?="{{!userLoggedIn}}">>
+                    <sept-util-request id="addComment" operation="RESTOperation.addComment"></sept-util-request>
+                    
+                    <div class="comment">
+                        <div class="commentWrapper">
+                            <div class="commentInfos">
+                                <div class="commentAuthor">{{currentUserName}}</div>
+                                <div class="commentDate"></div>
+                                <paper-button icon="social:share" on-tap="{{addComment}}" disabled?="{{isValidCommentValue == false}}" label="DODAJ KOMENTARZ"></paper-button>
                             </div>
-                            <div id="commentContent" contenteditable="true"
-                                 data-ph="Tutaj wpisz treść nowego komentarza...">
-                                {{newCommentContent}}
-                            </div>
+                            <div-html class="commentContent" contenteditable="true" id="newCommentContent" on-input="{{checkNewComment}}"
+                                 placeholder="Tutaj wpisz treść nowego komentarza..."><!--
+                            --></div-html>
                         </div>
                     </div>
                 </div>
@@ -50,11 +56,11 @@
     </template>
 
     <script>
+
         Polymer('sept-comments-view', {
             commentsCount : 0, // declared for save not-null use
             userLoggedIn : false,
-            ready : function() {
-            },
+
             currentUserName : "",
             commentsChanged : function() {
                 this.commentsCount = this.comments.length;
@@ -66,9 +72,25 @@
             commentsStateChangeEnd : function() {
                 this.fire('toggle-comments', { scrollOffset: 9999+128});
             },
+            /* comments writer */
             updateUser : function() {
                 this.userLoggedIn = septEngine.user.isLoggedIn();
                 this.currentUserName = (this.userLoggedIn) ? septEngine.user.session.user.username : "Niezalogowany";
+            },
+            isValidCommentValue: false,
+            isValidComment : function() {
+                return (!_.isUndefined(this.$.newCommentContent.html) && this.$.newCommentContent.html.length > 0);
+            },
+            isValidCommentThrottled : _.throttle(function() {this.isValidCommentValue = this.isValidComment(); console.log("new valid val: "+this.isValidCommentValue); }, 500),
+            addComment : function() {
+                if(!this.isValidComment()) return;
+                this.$.addComment.bind.content = this.$.newCommentContent.html.trim();
+                this.$.addComment.bind.articleId = this.articleId;
+                this.$.addComment.go();
+            },
+            checkNewComment : function() {
+                var self = this;
+                this.isValidCommentThrottled();
             }
         });
     </script>

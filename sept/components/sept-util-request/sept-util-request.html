@@ -39,7 +39,7 @@
 
             createRESTRequest : function (model) {
                 var message = new septEngine.domain.RESTRequest(
-                        new septEngine.domain.RESTRequestHeaders(this.operation, septEngine.userSession),
+                        new septEngine.domain.RESTRequestHeaders(this.operation, septEngine.user.session),
                         model);
                 return message;
             },

@@ -4,6 +4,7 @@
 <link rel="import" href="../../../bower_components/core-icon-button/core-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../sept-comments-view/sept-comments-view.html">
+<link rel="import" href="../sept-util-request/sept-util-request.html">
 
 <polymer-element name="sept-article-view-full" attributes="article">
     <template>
@@ -28,10 +29,10 @@
                 </core-toolbar>
                 <section hero-id="hero-art-content" hero content>
                     <p id="firstParagraph" hero-id="hero-art-1stparagraph" hero content></p>
-
                     <div id="restOfText" content></div>
                     <div id="author" hero-id="hero-art-author" hero content>{{article.author}}</div>
-                    <sept-comments-view comments="{{article.comments}}" content> </sept-comments-view>
+
+                    <sept-comments-view comments="{{article.comments}}" articleID="{{article.id}}" content> </sept-comments-view>
                 </section>
 
             </core-scroll-header-panel>

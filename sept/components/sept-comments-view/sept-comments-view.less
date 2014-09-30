@@ -25,7 +25,7 @@ section#commentsSection {
     padding-left: 3em;
     font-size: @fontSizeSubtitle;
   }
-  & #comment {
+  & .comment {
     margin-top: 1.5em;
     margin-left: 2%; margin-right: 2%;
     padding-left: 2%;
@@ -34,31 +34,32 @@ section#commentsSection {
     padding-bottom: 2.5em;
     border-bottom: 1px @fontInverseDisabled solid;
   }
-  & #commentInfos {
+  & .commentInfos {
+    position: relative;
     display: inline-block;
     width: 26%;
     padding-bottom: 2em;
     vertical-align: top;
-    & #commentAuthor {
+    & .commentAuthor {
       color: @themeColorBase;
       opacity: 0.9;
       word-break: break-word;
       font-size: @fontSizeDisplay;
       font-weight: lighter;
     }
-    & #commentDate {
+    & .commentDate {
       font-weight: 300;
       color: @fontInverseLight;
       display: block;
       font-size: @fontSizeTitle;
     }
   }
-  & #commentContent {
+  & .commentContent {
     display: inline-block;
     width: 70%;
     font-weight: 300;
   }
-  & #commentsWriter {
+  & .commentsWriter {
     display: block;
     & [hidden="false"] {
       display: block !important;
@@ -71,14 +72,7 @@ section#commentsSection {
     text-align: center;
     color: @fontInverseLight;
   }
-}
-[contenteditable="true"]{
-  outline-color: @themeColorBase;
-}
-
-[contenteditable="true"]:empty:not(:focus):before{
-  content:attr(data-ph);
-  color: @fontInverseLight;
-  font-style:italic;
-  width: 200px;
+  & paper-button {
+    margin-top: 0.5em;
+  }
 }
