@@ -1,0 +1,18 @@
+
+<polymer-element name="div-html" attributes="initHtml html class style contenteditable placeholder">
+    <template>
+        <link rel="stylesheet" type="text/css" href="div-html.css"/>
+        <div id="htmlDiv" class="{{class}}" contenteditable?="{{contenteditable}}" data-placeholder="{{placeholder}}" style="{{style}}" on-input="{{innerHTMLChanged}}"></div>
+    </template>
+
+    <script>
+        Polymer('div-html', {
+            initHtmlChanged     : function () {
+                this.$.htmlDiv.innerHTML = this.initHtml;
+            },
+            innerHTMLChanged: function (oldVal, newVal) {
+                this.html = this.$.htmlDiv.innerHTML ;
+            }
+        });
+    </script>
+</polymer-element>

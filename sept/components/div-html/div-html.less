@@ -1,0 +1,12 @@
+@import '../../../style/global-constants.less';
+
+[contenteditable="true"]{
+  outline-color: @themeColorBase;
+}
+
+[contenteditable="true"]:empty:not(:focus):before {
+  opacity: 1;
+  content:attr(data-placeholder);
+  color: @fontInverseLight;
+  font-style:italic;
+}
